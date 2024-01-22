@@ -2,17 +2,20 @@
  SELECT * 
  FROM world_life_expectancy;
  
- SELECT country, year, CONCAT(country, year), count(CONCAT(country, year))
+--  Check for Duplicates
+ SELECT country, year, CONCAT(country, year), count(CONCAT(country, year))  
  FROM world_life_expectancy
  GROUP BY country, year, CONCAT(country, year)
  HAVING count(CONCAT(country, year)) > 1;
  
+--  Using window function, check for duplicates to asign row_num on the duplicated rows
  SELECT * FROM
  (SELECT row_id, CONCAT(country, year),
  row_number() Over(PARTITION BY CONCAT(country, year) ORDER BY CONCAT(country,year)) As Row_num
  FROM world_life_expectancy) AS Row_table
  WHERE row_num > 1;
  
+-- Delete Duplicates
  Delete FROM world_life_expectancy
  WHERE row_id IN (
  SELECT row_id FROM
@@ -66,6 +69,7 @@ JOIN world_life_expectancy t2
  AND t1.year = t3.year + 1
  WHERE t1.`Life expectancy` = '';
  
+--  Update the missing values with the average of upper and lower values
  UPDATE world_life_expectancy t1
  JOIN world_life_expectancy t2
  ON t1.country = t2.country
