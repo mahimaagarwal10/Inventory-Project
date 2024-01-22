@@ -66,7 +66,7 @@ JOIN world_life_expectancy t2
  AND t1.year = t3.year + 1
  WHERE t1.`Life expectancy` = '';
  
- update world_life_expectancy t1
+ UPDATE world_life_expectancy t1
  JOIN world_life_expectancy t2
  ON t1.country = t2.country
  AND t1.year = t2.year - 1
